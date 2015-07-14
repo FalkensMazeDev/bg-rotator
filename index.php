@@ -60,7 +60,7 @@ if ($bgcount > 0) {
 			
 		    imageinterval = setInterval(function() {
 			    var newimg;
-			    if (curimage == imgcnt) newimg = 1;
+			    if (curimage == (imgcnt-1)) newimg = 0;
 			    else newimg = curimage + 1;
 			    
 			    jQuery("#image" + curimage).fadeToggle(1000);
@@ -74,7 +74,7 @@ if ($bgcount > 0) {
 	<body>
 <?php
 if ($bgcount > 0)
-	for ($x = 0; $x <= $bgcount; $x++) {
+	for ($x = 0; $x < $bgcount; $x++) {
 		?>
 		<div id="image<?=$x?>" class="rotator"></div>
 		<?php
