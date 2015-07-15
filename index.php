@@ -51,23 +51,41 @@ if ($bgcount > 0) {
 			margin:auto;
 			background-color:#fff;
 			opacity:.7;
+			padding:20px;
 		}
 		</style>
 		<script>
 		jQuery( document ).ready(function() {
 			var imgcnt = <?=$bgcount;?>;
 			var curimage = 0;
+			var rotatorCall;
+			var fadetime = 1000;
+			var waittime = 3000;
+			var stopBgImages = false;
 			
-		    imageinterval = setInterval(function() {
-			    var newimg;
-			    if (curimage == (imgcnt-1)) newimg = 0;
-			    else newimg = curimage + 1;
-			    
-			    jQuery("#image" + curimage).fadeToggle(1000);
-			    jQuery("#image" + newimg).fadeToggle(1000);
-			    curimage = newimg;
-			    
-		    }, 3000);
+			var changeBgImage = function () {
+				//console.log("stop bg? " + stopBgImages);
+				if (!stopBgImages) {
+				    var newimg;
+				    if (curimage == (imgcnt-1)) newimg = 0;
+				    else newimg = curimage + 1;
+
+				    jQuery("#image" + curimage).fadeToggle(fadetime);
+				    jQuery("#image" + newimg).fadeToggle(fadetime);
+					jQuery("#image" + newimg).promise().done(function(){
+						rotatorCall = setTimeout(function(){ changeBgImage()}, waittime);
+					});
+					curimage = newimg;
+				}
+			}
+			
+			rotatorCall = setTimeout(function(){ changeBgImage()}, waittime);
+			
+			jQuery(".stopBgImages").click(function(){
+				stopBgImages = true;
+				//console.log("attemptstop");
+			});
+
 		});
 		</script>
 	</head>
@@ -82,8 +100,17 @@ if ($bgcount > 0)
 ?>
 		<div id="main-content">
 			<h1>
-				Test Content
+				BG Rotator Script
 			</h1>
+			<p>
+				This little script crawls a given directory for files with extensions that are matching specified extensions.  It then takes those images and outputs them as background images and fades between them.
+			</p>
+			<p>
+				This project can be found on GitHub at <a target="_blank" href="https://github.com/WPCMSNinja/bg-rotator" >https://github.com/WPCMSNinja/bg-rotator</a>
+			</p>
+			<p>
+				<a href="#" class="stopBgImages">Stop Rotating</a>
+			</p>
 		</div>
 </body>
 </html>
